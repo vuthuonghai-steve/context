@@ -1,0 +1,12 @@
+name: TicketAttachment
+table: ticket_attachments
+description: "File đính kèm trong tin nhắn của ticket"
+properties:
+  id: { type: integer, readOnly: true }
+  ticket_message_id: { type: integer }
+  path: { type: string }
+  filename: { type: string }
+  mime: { type: string }
+  size: { type: integer, description: "bytes" }
+relationships:
+  - { type: belongsTo, related: TicketMessage }

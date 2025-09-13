@@ -1,0 +1,14 @@
+name: WebhookLog
+table: webhook_logs
+description: "Log ghi lại các request webhook đã nhận"
+properties:
+  id: { type: integer, readOnly: true }
+  webhook_id: { type: integer, description: "FK -> webhooks_config.id" }
+  request_id: { type: string, description: "ID request để chống lặp (idempotency)" }
+  status_code: { type: integer }
+  received_at: { type: string, format: date-time }
+  payload: { type: object, format: json }
+  processed_at: { type: string, format: date-time, nullable: true }
+  error_message: { type: string, nullable: true }
+relationships:
+  - { type: belongsTo, related: WebhookConfig }

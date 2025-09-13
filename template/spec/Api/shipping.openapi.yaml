@@ -1,0 +1,49 @@
+openapi: 3.0.0
+info:
+  title: Shipping Integration API
+  version: 1.0.0
+  description: API for integrating with shipping providers like GHN and GHTK.
+paths:
+  /api/admin/orders/{id}/push-to-shipping:
+    post:
+      summary: '[Admin] Push an order to a shipping provider'
+      tags: [Admin - Shipping]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                carrier_code:
+                  type: string
+                  enum: [ghn, ghtk]
+              required: [carrier_code]
+      responses:
+        '200':
+          description: Order successfully pushed to shipping provider. Returns the shipment details.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/shipment.yaml'
+        '400':
+          description: Bad request (e.g., order not in a valid state to be shipped).
+  /api/shipping/webhook:
+    post:
+      summary: Handle webhook from shipping provider
+      tags: [Shipping]
+      description: Webhook endpoint for shipping providers to send asynchronous status updates.
+      requestBody:
+        description: The payload from the shipping provider (GHN, GHTK, etc.).
+        content:
+          application/json: {}
+      responses:
+        '200':
+          description: Acknowledgment of receipt.

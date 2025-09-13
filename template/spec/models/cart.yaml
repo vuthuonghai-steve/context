@@ -1,0 +1,22 @@
+name: Cart
+table: carts
+description: "Giỏ hàng của người dùng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  status:
+    type: string
+    enum: ['active', 'converted', 'abandoned']
+    description: "Trạng thái giỏ hàng"
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng sở hữu giỏ hàng."
+  - type: hasMany
+    related: CartItem
+    description: "Các mục trong giỏ hàng."

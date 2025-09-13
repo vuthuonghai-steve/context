@@ -1,0 +1,66 @@
+name: Order
+table: orders
+description: "Đơn hàng do người dùng tạo"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  code:
+    type: string
+    description: "Mã đơn hàng, duy nhất"
+    unique: true
+  status:
+    type: string
+    enum: ['pending','processing','packed','shipping','delivered','cancelled']
+    description: "Trạng thái xử lý đơn hàng"
+  payment_status:
+    type: string
+    enum: ['unpaid','paid']
+    description: "Trạng thái thanh toán"
+  payment_method:
+    type: string
+    enum: ['cod']
+    description: "Phương thức thanh toán"
+  subtotal:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+  discount_total:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+  shipping_fee:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+  grand_total:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+  shipping_address_id:
+    type: integer
+    description: "FK tham chiếu đến 'addresses.id'"
+  notes:
+    type: string
+    format: text
+    description: "Ghi chú của khách hàng cho đơn hàng"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng đã đặt hàng."
+  - type: hasMany
+    related: OrderItem
+    description: "Các mục sản phẩm trong đơn hàng."
+  - type: hasOne
+    related: Address
+    foreignKey: shipping_address_id
+    description: "Địa chỉ giao hàng của đơn hàng."

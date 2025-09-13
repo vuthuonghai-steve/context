@@ -1,0 +1,42 @@
+name: Payment
+table: payments
+description: "Thông tin thanh toán cho một đơn hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id', duy nhất"
+    unique: true
+  provider:
+    type: string
+    enum: ['cod']
+    description: "Nhà cung cấp dịch vụ thanh toán"
+  amount:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Số tiền thanh toán"
+  txn_code:
+    type: string
+    description: "Mã giao dịch từ nhà cung cấp"
+    nullable: true
+  status:
+    type: string
+    enum: ['initiated', 'succeeded', 'failed']
+    description: "Trạng thái thanh toán"
+  paid_at:
+    type: string
+    format: date-time
+    description: "Thời điểm thanh toán thành công"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng được thanh toán."
+  - type: hasMany
+    related: PaymentTransaction
+    description: "Lịch sử giao dịch của thanh toán này."

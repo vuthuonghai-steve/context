@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: Product Review API
+  version: 1.0.0
+  description: API for public users to read and submit product reviews.
+
+paths:
+  /api/products/{slug}/reviews:
+    get:
+      summary: Get reviews for a specific product
+      tags: [Reviews]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URL-friendly slug of the product.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number for pagination.
+      responses:
+        '200':
+          description: A paginated list of reviews for the product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../models/product_review.yaml'
+                  links:
+                    type: object # For pagination
+                  meta:
+                    type: object # For pagination
+        '404':
+          description: Product not found.
+
+  /api/reviews:
+    post:
+      summary: Submit a review for a product
+      tags: [Reviews]
+      description: Allows an authenticated user to submit a review for a product they have purchased.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_item_id:
+                  type: integer
+                  description: The specific order item ID being reviewed. This proves the user purchased the product.
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  example: 5
+                comment:
+                  type: string
+                  example: "This is a great product!"
+              required: [order_item_id, rating]
+      responses:
+        '201':
+          description: Review submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/product_review.yaml'
+        '403':
+          description: Forbidden (user is not eligible to review this product, e.g., did not purchase the order item).
+        '422':
+          description: Validation error (e.g., already reviewed this item, rating out of range).
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

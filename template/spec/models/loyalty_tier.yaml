@@ -1,0 +1,22 @@
+name: LoyaltyTier
+table: loyalty_tiers
+description: "Các hạng thành viên của chương trình khách hàng thân thiết"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  name:
+    type: string
+    description: "Tên hạng thành viên (ví dụ: Silver, Gold)"
+  min_points:
+    type: integer
+    description: "Số điểm tối thiểu để đạt được hạng này"
+  benefits:
+    type: object
+    format: json
+    description: "Mô tả các quyền lợi của hạng thành viên"
+relationships:
+  - type: hasMany
+    related: UserLoyalty
+    description: "Những người dùng thuộc hạng này."

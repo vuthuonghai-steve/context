@@ -1,0 +1,168 @@
+openapi: 3.0.0
+info:
+  title: Voucher & Promotion API
+  version: 1.0.0
+  description: API for applying and managing vouchers.
+
+paths:
+  # ===================================================================
+  # Public Voucher Endpoints
+  # ===================================================================
+  /api/vouchers/{code}:
+    get:
+      summary: Get voucher details by code
+      tags: [Vouchers]
+      description: Allows a user to check the validity and conditions of a voucher code.
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The voucher code.
+      responses:
+        '200':
+          description: Voucher details.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/voucher.yaml'
+        '404':
+          description: Voucher not found or is inactive.
+
+  /api/cart/apply-voucher:
+    post:
+      summary: Apply a voucher to the current cart
+      tags: [Cart, Vouchers]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The voucher code to apply.
+              required: [code]
+      responses:
+        '200':
+          description: Voucher applied successfully. Returns the updated cart.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/cart.yaml'
+        '400':
+          description: Bad request (e.g., voucher conditions not met, voucher expired, cart empty).
+        '404':
+          description: Voucher code not found.
+
+  # ===================================================================
+  # Admin Voucher Management
+  # ===================================================================
+  /api/admin/vouchers:
+    get:
+      summary: '[Admin] List all vouchers'
+      tags: [Admin - Vouchers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: A paginated list of vouchers.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../models/voucher.yaml'
+    post:
+      summary: '[Admin] Create a new voucher'
+      tags: [Admin - Vouchers]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/voucher.yaml' # Using the full model for creation
+      responses:
+        '201':
+          description: Voucher created successfully.
+        '422':
+          description: Validation error.
+
+  /api/admin/vouchers/{id}:
+    get:
+      summary: '[Admin] Get a single voucher'
+      tags: [Admin - Vouchers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Voucher details.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/voucher.yaml'
+        '404':
+          description: Voucher not found.
+    put:
+      summary: '[Admin] Update a voucher'
+      tags: [Admin - Vouchers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../models/voucher.yaml' # Using the full model for update
+      responses:
+        '200':
+          description: Voucher updated successfully.
+        '404':
+          description: Voucher not found.
+        '422':
+          description: Validation error.
+    delete:
+      summary: '[Admin] Delete a voucher'
+      tags: [Admin - Vouchers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: Voucher deleted successfully.
+        '404':
+          description: Voucher not found.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

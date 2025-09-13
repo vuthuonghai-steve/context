@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: Admin Review Management API
+  version: 1.0.0
+  description: APIs for administrators to manage customer-submitted product reviews.
+
+paths:
+  /api/admin/reviews:
+    get:
+      summary: '[Admin] List all reviews'
+      tags: [Admin - Reviews]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: product_id
+          in: query
+          schema:
+            type: integer
+          description: Filter reviews by product ID.
+        - name: user_id
+          in: query
+          schema:
+            type: integer
+          description: Filter reviews by user ID.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number for pagination.
+      responses:
+        '200':
+          description: A paginated list of all reviews.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../models/product_review.yaml'
+                  links:
+                    type: object # For pagination
+                  meta:
+                    type: object # For pagination
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden.
+
+  /api/admin/reviews/{id}:
+    patch:
+      summary: '[Admin] Update a review'
+      tags: [Admin - Reviews]
+      description: Allows an admin to update the properties of a review, e.g., to hide or approve it.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_approved:
+                  type: boolean
+                  description: Set to true to show the review, false to hide it.
+      responses:
+        '200':
+          description: Review updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/product_review.yaml'
+        '404':
+          description: Review not found.
+    delete:
+      summary: '[Admin] Delete a review'
+      tags: [Admin - Reviews]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Review deleted successfully.
+        '404':
+          description: Review not found.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

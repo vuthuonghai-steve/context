@@ -1,0 +1,57 @@
+name: Refund
+table: refunds
+description: "Yêu cầu hoàn tiền cho đơn hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id'"
+  payment_id:
+    type: integer
+    description: "FK tham chiếu đến 'payments.id'"
+    nullable: true
+  code:
+    type: string
+    description: "Mã yêu cầu hoàn tiền, duy nhất"
+    unique: true
+  status:
+    type: string
+    enum: ['requested', 'approved', 'rejected', 'processing', 'completed']
+    description: "Trạng thái yêu cầu"
+  amount:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Tổng số tiền yêu cầu hoàn"
+  reason:
+    type: string
+    description: "Lý do hoàn tiền"
+  approved_by:
+    type: integer
+    description: "FK tham chiếu đến 'users.id' (admin duyệt)"
+    nullable: true
+  requested_at:
+    type: string
+    format: date-time
+  processed_at:
+    type: string
+    format: date-time
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng được yêu cầu hoàn tiền."
+  - type: belongsTo
+    related: Payment
+    description: "Giao dịch thanh toán liên quan."
+  - type: belongsTo
+    related: User
+    foreignKey: approved_by
+    description: "Admin đã duyệt yêu cầu."
+  - type: hasMany
+    related: RefundItem
+    description: "Các mục sản phẩm được hoàn tiền."

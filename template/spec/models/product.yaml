@@ -1,0 +1,91 @@
+name: Product
+table: products
+description: "Thông tin chi tiết về sản phẩm lò vi sóng."
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  category_id:
+    type: integer
+    description: "FK tham chiếu đến 'categories.id'"
+  brand_id:
+    type: integer
+    description: "FK tham chiếu đến 'brands.id'"
+  name:
+    type: string
+    description: "Tên sản phẩm"
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+  price:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá bán gốc của sản phẩm"
+  sale_price:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá khuyến mãi (nếu có)"
+    nullable: true
+  capacity_liters:
+    type: integer
+    description: "Dung tích lò (lít)"
+  power_watt:
+    type: integer
+    description: "Công suất (watt)"
+    nullable: true
+  has_grill:
+    type: boolean
+    description: "Có chức năng nướng hay không"
+    default: false
+  inverter:
+    type: boolean
+    description: "Có công nghệ Inverter tiết kiệm điện hay không"
+  child_lock:
+    type: boolean
+    description: "Có chức năng khóa trẻ em hay không"
+  energy_rating:
+    type: integer
+    format: tinyint
+    description: "Xếp hạng năng lượng (nếu có)"
+    nullable: true
+  warranty_months:
+    type: integer
+    description: "Thời gian bảo hành (tháng)"
+  thumbnail:
+    type: string
+    description: "URL ảnh đại diện của sản phẩm"
+    nullable: true
+  description:
+    type: string
+    format: longtext
+    description: "Bài viết mô tả chi tiết sản phẩm"
+    nullable: true
+  is_active:
+    type: boolean
+    description: "Sản phẩm có đang được hiển thị và bán hay không"
+    default: true
+relationships:
+  - type: belongsTo
+    related: Category
+    description: "Danh mục mà sản phẩm thuộc về."
+  - type: belongsTo
+    related: Brand
+    description: "Thương hiệu của sản phẩm."
+  - type: hasOne
+    related: ProductStock
+    description: "Thông tin tồn kho của sản phẩm."
+  - type: hasOne
+    related: ProductStatistic
+    description: "Các số liệu thống kê của sản phẩm."
+  - type: hasMany
+    related: ProductReview
+    description: "Danh sách các bài đánh giá cho sản phẩm."
+  - type: hasMany
+    related: StockMovement
+    description: "Lịch sử xuất/nhập/điều chỉnh kho của sản phẩm."

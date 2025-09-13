@@ -1,0 +1,32 @@
+name: Promotion
+table: promotions
+description: "Chương trình khuyến mãi"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  name:
+    type: string
+    description: "Tên chương trình khuyến mãi"
+  description:
+    type: string
+    format: text
+    description: "Mô tả chi tiết"
+  scope:
+    type: string
+    enum: ['ALL', 'CATEGORY', 'PRODUCT']
+    description: "Phạm vi áp dụng khuyến mãi"
+  payload:
+    type: object
+    format: json
+    description: "Dữ liệu chi tiết về phạm vi (danh sách ID, điều kiện)"
+  start_at:
+    type: string
+    format: date-time
+  end_at:
+    type: string
+    format: date-time
+  is_active:
+    type: boolean
+relationships: []

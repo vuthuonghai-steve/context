@@ -1,0 +1,33 @@
+name: LoyaltyTransaction
+table: loyalty_transactions
+description: "Lịch sử giao dịch điểm của khách hàng thân thiết"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  type:
+    type: string
+    enum: ['earn', 'spend', 'expire', 'adjust']
+    description: "Loại giao dịch (tích, tiêu, hết hạn, điều chỉnh)"
+  points:
+    type: integer
+    description: "Số điểm thay đổi (có thể âm hoặc dương)"
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id' (nếu có)"
+    nullable: true
+  note:
+    type: string
+    description: "Ghi chú cho giao dịch"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng thực hiện giao dịch."
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng liên quan (nếu có)."

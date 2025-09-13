@@ -1,0 +1,30 @@
+name: CartItem
+table: cart_items
+description: "Một mục sản phẩm trong giỏ hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  cart_id:
+    type: integer
+    description: "FK tham chiếu đến 'carts.id'"
+  product_id:
+    type: integer
+    description: "FK tham chiếu đến 'products.id'"
+  price_snapshot:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá sản phẩm tại thời điểm thêm vào giỏ"
+  quantity:
+    type: integer
+    description: "Số lượng sản phẩm"
+relationships:
+  - type: belongsTo
+    related: Cart
+    description: "Giỏ hàng chứa mục này."
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm tương ứng."

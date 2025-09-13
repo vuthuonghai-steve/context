@@ -1,0 +1,16 @@
+name: PaymentTransaction
+table: payment_transactions
+description: "Giao dịch chi tiết với cổng thanh toán"
+properties:
+  id: { type: integer, readOnly: true }
+  payment_id: { type: integer }
+  gateway: { type: string, enum: ['vnpay', 'momo', 'cod'] }
+  txn_ref: { type: string, description: "Mã tham chiếu của gateway" }
+  amount: { type: number, format: decimal, precision: 12, scale: 2 }
+  status: { type: string, enum: ['initiated', 'redirected', 'succeeded', 'failed', 'refunded'] }
+  response_code: { type: string, nullable: true }
+  message: { type: string, nullable: true }
+  raw_request: { type: object, format: json }
+  raw_response: { type: object, format: json }
+relationships:
+  - { type: belongsTo, related: Payment }

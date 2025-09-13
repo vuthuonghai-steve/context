@@ -1,0 +1,37 @@
+name: Address
+table: addresses
+description: "Địa chỉ giao hàng của người dùng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  full_name:
+    type: string
+    description: "Tên đầy đủ người nhận"
+  phone:
+    type: string
+    description: "Số điện thoại người nhận"
+  line1:
+    type: string
+    description: "Địa chỉ chi tiết (số nhà, tên đường)"
+  district:
+    type: string
+    description: "Quận/Huyện"
+  city:
+    type: string
+    description: "Tỉnh/Thành phố"
+  country_code:
+    type: string
+    description: "Mã quốc gia (mặc định 'VN')"
+    default: 'VN'
+  is_default:
+    type: boolean
+    description: "Là địa chỉ mặc định hay không"
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng sở hữu địa chỉ này."

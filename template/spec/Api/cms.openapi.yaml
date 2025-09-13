@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: CMS API
+  version: 1.0.0
+  description: API for managing static pages and blog posts.
+paths:
+  # Public
+  /api/pages/{slug}:
+    get:
+      summary: Get a static page by slug
+      tags: [CMS]
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Page content.
+          content: { application/json: { schema: { $ref: '../models/page.yaml' } } }
+  /api/posts:
+    get:
+      summary: List blog posts
+      tags: [CMS]
+      responses:
+        '200':
+          description: A list of posts.
+  /api/posts/{slug}:
+    get:
+      summary: Get a blog post by slug
+      tags: [CMS]
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Post content.
+          content: { application/json: { schema: { $ref: '../models/post.yaml' } } }
+  # Admin Pages
+  /api/admin/pages:
+    get:
+      summary: '[Admin] List pages'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: A list of pages. }
+    post:
+      summary: '[Admin] Create a page'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Page created. }
+  /api/admin/pages/{id}:
+    get:
+      summary: '[Admin] Get a page'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Page content. }
+    put:
+      summary: '[Admin] Update a page'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Page updated. }
+    delete:
+      summary: '[Admin] Delete a page'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '204': { description: Page deleted. }
+  # Admin Posts
+  /api/admin/posts:
+    get:
+      summary: '[Admin] List posts'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: A list of posts. }
+    post:
+      summary: '[Admin] Create a post'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Post created. }
+  /api/admin/posts/{id}:
+    get:
+      summary: '[Admin] Get a post'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Post content. }
+    put:
+      summary: '[Admin] Update a post'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Post updated. }
+    delete:
+      summary: '[Admin] Delete a post'
+      tags: [Admin - CMS]
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '204': { description: Post deleted. }

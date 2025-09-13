@@ -1,0 +1,12 @@
+name: ProductDailyStat
+table: product_daily_stats
+description: "Thống kê về sản phẩm theo ngày"
+properties:
+  id: { type: integer, readOnly: true }
+  date: { type: string, format: date }
+  product_id: { type: integer }
+  views: { type: integer }
+  add_to_carts: { type: integer }
+  purchases: { type: integer }
+relationships:
+  - { type: belongsTo, related: Product }

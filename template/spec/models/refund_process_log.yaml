@@ -1,0 +1,10 @@
+name: RefundProcessLog
+table: refund_process_logs
+description: "Log tiến trình xử lý một yêu cầu hoàn tiền"
+properties:
+  id: { type: integer, readOnly: true }
+  refund_id: { type: integer }
+  status: { type: string, description: "Trạng thái của tiến trình" }
+  note: { type: string, nullable: true }
+relationships:
+  - { type: belongsTo, related: Refund }

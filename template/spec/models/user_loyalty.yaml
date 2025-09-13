@@ -1,0 +1,21 @@
+name: UserLoyalty
+table: user_loyalty
+description: "Thông tin khách hàng thân thiết của người dùng"
+properties:
+  user_id:
+    type: integer
+    description: "PK, FK tham chiếu đến 'users.id'"
+    primary: true
+  points_balance:
+    type: integer
+    description: "Số điểm tích lũy hiện tại"
+  tier_id:
+    type: integer
+    description: "FK tham chiếu đến 'loyalty_tiers.id'"
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng."
+  - type: belongsTo
+    related: LoyaltyTier
+    description: "Hạng thành viên hiện tại của người dùng."

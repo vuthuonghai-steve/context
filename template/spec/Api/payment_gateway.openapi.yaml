@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: Payment Gateway API
+  version: 1.0.0
+  description: API for handling online payments with gateways like MoMo and VNPay.
+paths:
+  /api/orders/{id}/pay:
+    post:
+      summary: Initiate online payment for an order
+      tags: [Payment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gateway:
+                  type: string
+                  enum: [momo, vnpay]
+              required: [gateway]
+      responses:
+        '200':
+          description: Payment initiation successful. Returns a URL for the user to complete the payment.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payUrl:
+                    type: string
+                    format: uri
+        '400':
+          description: Bad request (e.g., order is already paid).
+  /api/payment/ipn:
+    post:
+      summary: Handle Instant Payment Notification (IPN) from gateway
+      tags: [Payment]
+      description: Webhook endpoint for payment gateways to send asynchronous payment status updates.
+      requestBody:
+        description: The payload from the payment gateway (MoMo, VNPay, etc.).
+        content:
+          application/json: {}
+      responses:
+        '200':
+          description: Acknowledgment of receipt.

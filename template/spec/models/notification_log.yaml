@@ -1,0 +1,16 @@
+name: NotificationLog
+table: notification_logs
+description: "Log ghi lại các thông báo đã gửi"
+properties:
+  id: { type: integer, readOnly: true }
+  user_id: { type: integer, nullable: true }
+  channel: { type: string, enum: ['email', 'sms', 'push', 'inapp'] }
+  template_key: { type: string }
+  to_address: { type: string, description: "Địa chỉ nhận (email, sđt)" }
+  subject: { type: string, nullable: true }
+  body_snapshot: { type: string, format: longtext }
+  status: { type: string, enum: ['queued', 'sent', 'failed'] }
+  sent_at: { type: string, format: date-time, nullable: true }
+  error_message: { type: string, nullable: true }
+relationships:
+  - { type: belongsTo, related: User }

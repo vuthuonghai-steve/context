@@ -1,0 +1,32 @@
+name: Page
+table: pages
+description: "Các trang nội dung tĩnh (ví dụ: Giới thiệu, Chính sách)"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+  title:
+    type: string
+    description: "Tiêu đề trang"
+  content:
+    type: string
+    format: longtext
+    description: "Nội dung trang"
+  meta:
+    type: object
+    format: json
+    description: "Dữ liệu SEO (meta title, description, OG tags)"
+  is_published:
+    type: boolean
+    description: "Trang đã được xuất bản hay chưa"
+  published_at:
+    type: string
+    format: date-time
+    description: "Thời điểm xuất bản"
+    nullable: true
+relationships: []

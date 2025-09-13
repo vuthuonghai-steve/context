@@ -1,0 +1,153 @@
+openapi: 3.0.0
+info:
+  title: Shopping Cart & Checkout API
+  version: 1.0.0
+  description: API for managing the user's shopping cart and processing checkout.
+
+paths:
+  # ===================================================================
+  # Cart Management
+  # ===================================================================
+  /api/cart:
+    get:
+      summary: Get the current user's cart
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The user's current cart details.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/cart.yaml'
+        '404':
+          description: No active cart found for the user.
+
+  /api/cart/items:
+    post:
+      summary: Add an item to the cart
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  example: 1
+                quantity:
+                  type: integer
+                  example: 1
+              required: [product_id, quantity]
+      responses:
+        '200':
+          description: Item added successfully. Returns the updated cart.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/cart.yaml'
+        '422':
+          description: Validation error (e.g., product out of stock, invalid quantity).
+
+  /api/cart/items/{itemId}:
+    patch:
+      summary: Update an item's quantity in the cart
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 2
+              required: [quantity]
+      responses:
+        '200':
+          description: Item updated successfully. Returns the updated cart.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/cart.yaml'
+        '404':
+          description: Cart item not found.
+        '422':
+          description: Validation error (e.g., not enough stock).
+    delete:
+      summary: Remove an item from the cart
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item removed successfully. Returns the updated cart.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/cart.yaml'
+        '404':
+          description: Cart item not found.
+
+  # ===================================================================
+  # Checkout Processing
+  # ===================================================================
+  /api/checkout:
+    post:
+      summary: Process checkout and create an order
+      tags: [Checkout]
+      description: Converts the active cart into a new order with 'pending' status and 'cod' payment method.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shipping_address_id:
+                  type: integer
+                  description: The ID of the user's chosen shipping address.
+                notes:
+                  type: string
+                  description: Optional notes for the order.
+              required: [shipping_address_id]
+      responses:
+        '201':
+          description: Order created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/order.yaml'
+        '400':
+          description: Bad request (e.g., cart is empty, address not found).
+        '422':
+          description: Unprocessable entity (e.g., an item in the cart went out of stock).
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

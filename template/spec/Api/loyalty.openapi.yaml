@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Loyalty Program API
+  version: 1.0.0
+  description: API for managing the user's loyalty points, tier, and transaction history.
+
+paths:
+  # ===================================================================
+  # Public Loyalty Endpoints
+  # ===================================================================
+  /api/loyalty/profile:
+    get:
+      summary: Get the user's loyalty profile
+      tags: [Loyalty]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The user's loyalty profile, including current points and tier information.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/user_loyalty.yaml'
+        '401':
+          description: Unauthorized.
+
+  /api/loyalty/transactions:
+    get:
+      summary: Get the user's loyalty transaction history
+      tags: [Loyalty]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number for pagination.
+      responses:
+        '200':
+          description: A paginated list of the user's loyalty transactions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../models/loyalty_transaction.yaml'
+                  links:
+                    type: object # For pagination
+                  meta:
+                    type: object # For pagination
+        '401':
+          description: Unauthorized.
+
+  # ===================================================================
+  # Admin Loyalty Management
+  # ===================================================================
+  /api/admin/users/{id}/loyalty/adjust:
+    post:
+      summary: '[Admin] Adjust a user''s loyalty points'
+      tags: [Admin - Loyalty]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                points:
+                  type: integer
+                  description: The number of points to add (positive) or subtract (negative).
+                note:
+                  type: string
+                  description: A reason or note for the adjustment.
+              required: [points, note]
+      responses:
+        '200':
+          description: Points adjusted successfully. Returns the updated loyalty profile.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/user_loyalty.yaml'
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden.
+        '404':
+          description: User not found.
+        '422':
+          description: Validation error.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

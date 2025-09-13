@@ -1,0 +1,37 @@
+name: ProductReview
+table: product_reviews
+description: "Đánh giá của khách hàng về sản phẩm"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  order_item_id:
+    type: integer
+    description: "FK tham chiếu đến 'order_items.id', duy nhất"
+    unique: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  product_id:
+    type: integer
+    description: "FK tham chiếu đến 'products.id'"
+  rating:
+    type: integer
+    format: tinyint
+    description: "Điểm đánh giá từ 1 đến 5 sao"
+  comment:
+    type: string
+    format: text
+    description: "Nội dung bình luận, nhận xét"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: OrderItem
+    description: "Mục đơn hàng được đánh giá."
+  - type: belongsTo
+    related: User
+    description: "Người dùng đã viết đánh giá."
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm được đánh giá."

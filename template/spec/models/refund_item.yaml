@@ -1,0 +1,30 @@
+name: RefundItem
+table: refund_items
+description: "Một mục sản phẩm trong yêu cầu hoàn tiền"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  refund_id:
+    type: integer
+    description: "FK tham chiếu đến 'refunds.id'"
+  order_item_id:
+    type: integer
+    description: "FK tham chiếu đến 'order_items.id'"
+  quantity:
+    type: integer
+    description: "Số lượng sản phẩm hoàn"
+  amount:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Số tiền hoàn cho mục này"
+relationships:
+  - type: belongsTo
+    related: Refund
+    description: "Yêu cầu hoàn tiền chứa mục này."
+  - type: belongsTo
+    related: OrderItem
+    description: "Mục đơn hàng gốc được hoàn tiền."

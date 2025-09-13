@@ -1,0 +1,24 @@
+name: Brand
+table: brands
+description: "Thương hiệu sản phẩm"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  name:
+    type: string
+    description: "Tên thương hiệu, duy nhất"
+    unique: true
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+  is_active:
+    type: boolean
+    description: "Trạng thái kích hoạt"
+    default: true
+relationships:
+  - type: hasMany
+    related: Product
+    description: "Danh sách các sản phẩm thuộc về thương hiệu này."

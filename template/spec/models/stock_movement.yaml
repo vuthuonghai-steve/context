@@ -1,0 +1,34 @@
+name: StockMovement
+table: stock_movements
+description: "Ghi lại lịch sử thay đổi kho của sản phẩm"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  product_id:
+    type: integer
+    description: "FK tham chiếu đến 'products.id'"
+  type:
+    type: string
+    enum: ['in', 'out', 'reserve', 'release', 'sell', 'adjust']
+    description: "Loại thay đổi kho"
+  quantity:
+    type: integer
+    format: unsigned
+    description: "Số lượng thay đổi"
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id' (nếu có)"
+    nullable: true
+  note:
+    type: string
+    description: "Ghi chú cho việc thay đổi"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm có sự thay đổi kho."
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng liên quan (nếu có)."

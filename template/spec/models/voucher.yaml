@@ -1,0 +1,61 @@
+name: Voucher
+table: vouchers
+description: "Mã giảm giá áp dụng cho đơn hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  code:
+    type: string
+    description: "Mã code, duy nhất, viết hoa"
+    unique: true
+  type:
+    type: string
+    enum: ['PERCENT', 'FIXED']
+    description: "Loại giảm giá: theo % hoặc số tiền cố định"
+  value:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá trị giảm giá"
+  max_discount:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Mức giảm giá tối đa (cho loại PERCENT)"
+    nullable: true
+  min_order_total:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá trị đơn hàng tối thiểu để áp dụng"
+    nullable: true
+  start_at:
+    type: string
+    format: date-time
+    description: "Thời gian bắt đầu hiệu lực"
+  end_at:
+    type: string
+    format: date-time
+    description: "Thời gian kết thúc hiệu lực"
+  usage_limit:
+    type: integer
+    description: "Tổng số lượt có thể sử dụng"
+  used_count:
+    type: integer
+    description: "Số lượt đã sử dụng"
+  per_user_limit:
+    type: integer
+    description: "Số lần sử dụng tối đa cho mỗi người dùng"
+    default: 1
+  is_active:
+    type: boolean
+    description: "Voucher có đang hoạt động hay không"
+relationships:
+  - type: hasMany
+    related: VoucherUsage
+    description: "Lịch sử sử dụng voucher."

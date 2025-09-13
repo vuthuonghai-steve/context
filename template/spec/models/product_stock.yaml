@@ -1,0 +1,20 @@
+name: ProductStock
+table: product_stocks
+description: "Quản lý tồn kho cho sản phẩm"
+properties:
+  product_id:
+    type: integer
+    description: "PK, FK tham chiếu đến 'products.id'"
+    primary: true
+  stock_on_hand:
+    type: integer
+    format: unsigned
+    description: "Số lượng tồn kho thực tế có sẵn"
+  stock_reserved:
+    type: integer
+    format: unsigned
+    description: "Số lượng đang được giữ cho các đơn hàng chưa hoàn tất"
+relationships:
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm được quản lý tồn kho."
