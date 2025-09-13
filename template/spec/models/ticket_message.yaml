@@ -1,0 +1,12 @@
+name: TicketMessage
+table: ticket_messages
+description: "Tin nhắn trao đổi trong một ticket"
+properties:
+  id: { type: integer, readOnly: true }
+  ticket_id: { type: integer }
+  sender_id: { type: integer, description: "FK -> users.id" }
+  message: { type: string, format: longtext }
+relationships:
+  - { type: belongsTo, related: Ticket }
+  - { type: belongsTo, related: User, foreignKey: sender_id }
+  - { type: hasMany, related: TicketAttachment }

@@ -1,0 +1,26 @@
+name: ProductStatistic
+table: product_statistics
+description: "Số liệu thống kê tổng hợp cho sản phẩm"
+properties:
+  product_id:
+    type: integer
+    description: "PK, FK tham chiếu đến 'products.id'"
+    primary: true
+  total_sold:
+    type: integer
+    format: unsigned
+    description: "Tổng số lượng đã bán"
+  average_rating:
+    type: number
+    format: decimal
+    precision: 3
+    scale: 2
+    description: "Điểm đánh giá trung bình"
+  reviews_count:
+    type: integer
+    format: unsigned
+    description: "Tổng số lượt đánh giá"
+relationships:
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm được thống kê."

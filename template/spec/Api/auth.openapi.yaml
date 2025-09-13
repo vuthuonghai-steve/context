@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: Authentication & User Management API
+  version: 1.0.0
+  description: API for user registration, login, social login, and administrative user management.
+
+paths:
+  # ===================================================================
+  # Public Authentication
+  # ===================================================================
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, example: "John Doe" }
+                email: { type: string, format: email, example: "user@example.com" }
+                password: { type: string, format: password, example: "password123" }
+                password_confirmation: { type: string, format: password, example: "password123" }
+              required: [name, email, password, password_confirmation]
+      responses:
+        '201':
+          description: User created successfully. Returns user data and tokens.
+        '422':
+          description: Validation error.
+
+  /api/auth/login:
+    post:
+      summary: Log in a user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+              required: [email, password]
+      responses:
+        '200':
+          description: Login successful. Returns user data and tokens.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '../models/user.yaml'
+                  access_token:
+                    type: string
+        '401':
+          description: Unauthorized (invalid credentials).
+
+  /api/auth/logout:
+    post:
+      summary: Log out the current user
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful.
+
+  # ===================================================================
+  # Socialite (Google) Authentication
+  # ===================================================================
+  /api/auth/google/redirect:
+    get:
+      summary: Redirect to Google for authentication
+      tags: [Authentication, Social Login]
+      responses:
+        '302':
+          description: Redirects the user to Google's OAuth 2.0 server.
+
+  /api/auth/google/callback:
+    get:
+      summary: Handle Google authentication callback
+      tags: [Authentication, Social Login]
+      description: Google redirects here after authentication. The backend handles the user creation/login and returns tokens.
+      responses:
+        '200':
+          description: Social login successful. Returns user data and tokens.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '../models/user.yaml'
+                  access_token:
+                    type: string
+        '500':
+          description: Internal server error during socialite callback processing.
+
+  # ===================================================================
+  # Authenticated User Profile
+  # ===================================================================
+  /api/me:
+    get:
+      summary: Get the current authenticated user's profile
+      tags: [User Profile]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile data, including role.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/user.yaml'
+
+  # ===================================================================
+  # Admin User Management
+  # ===================================================================
+  /api/admin/users:
+    get:
+      summary: '[Admin] List users'
+      tags: [Admin - Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: A paginated list of users.
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden.
+
+  /api/admin/users/{id}:
+    get:
+      summary: '[Admin] Get a single user'
+      tags: [Admin - Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: A single user's data.
+          content:
+            application/json:
+              schema:
+                $ref: '../models/user.yaml'
+        '404':
+          description: User not found.
+    put:
+      summary: '[Admin] Update a user'
+      tags: [Admin - Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                role: { type: string, enum: ['CUSTOMER', 'ADMIN'] }
+      responses:
+        '200':
+          description: User updated successfully.
+        '404':
+          description: User not found.
+        '422':
+          description: Validation error.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

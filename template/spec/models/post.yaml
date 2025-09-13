@@ -1,0 +1,48 @@
+name: Post
+table: posts
+description: "Bài viết trên blog/tin tức"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  author_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id' (tác giả)"
+  title:
+    type: string
+    description: "Tiêu đề bài viết"
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+  excerpt:
+    type: string
+    format: text
+    description: "Đoạn tóm tắt ngắn"
+    nullable: true
+  content:
+    type: string
+    format: longtext
+    description: "Nội dung bài viết"
+  is_published:
+    type: boolean
+    description: "Bài viết đã được xuất bản hay chưa"
+  published_at:
+    type: string
+    format: date-time
+    description: "Thời điểm xuất bản"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: User
+    foreignKey: author_id
+    description: "Tác giả của bài viết."
+  - type: belongsToMany
+    related: PostCategory
+    table: post_category_post
+    description: "Các danh mục của bài viết."
+  - type: belongsToMany
+    related: PostTag
+    table: post_post_tag
+    description: "Các thẻ của bài viết."

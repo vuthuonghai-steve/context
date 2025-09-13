@@ -1,0 +1,35 @@
+name: Category
+table: categories
+description: "Danh mục sản phẩm"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  parent_id:
+    type: integer
+    description: "ID của danh mục cha (tham chiếu đến chính nó)"
+    nullable: true
+  name:
+    type: string
+    description: "Tên danh mục"
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+  is_active:
+    type: boolean
+    description: "Trạng thái kích hoạt"
+    default: true
+relationships:
+  - type: belongsTo
+    related: Category
+    foreignKey: parent_id
+    description: "Danh mục cha của danh mục này."
+  - type: hasMany
+    related: Category
+    foreignKey: parent_id
+    description: "Danh sách các danh mục con."
+  - type: hasMany
+    related: Product
+    description: "Danh sách các sản phẩm thuộc danh mục này."

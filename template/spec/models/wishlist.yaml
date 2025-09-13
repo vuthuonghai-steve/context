@@ -1,0 +1,18 @@
+name: Wishlist
+table: wishlists
+description: "Danh sách sản phẩm yêu thích của người dùng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+relationships:
+  - type: belongsTo
+    related: User
+    description: "Người dùng sở hữu danh sách này."
+  - type: hasMany
+    related: WishlistItem
+    description: "Các sản phẩm trong danh sách yêu thích."

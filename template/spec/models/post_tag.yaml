@@ -1,0 +1,20 @@
+name: PostTag
+table: post_tags
+description: "Thẻ (tag) cho bài viết"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  name:
+    type: string
+    description: "Tên thẻ"
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+relationships:
+  - type: belongsToMany
+    related: Post
+    table: post_post_tag
+    description: "Các bài viết được gắn thẻ này."

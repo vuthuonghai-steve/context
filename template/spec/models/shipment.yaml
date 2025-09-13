@@ -1,0 +1,60 @@
+name: Shipment
+table: shipments
+description: "Thông tin một đơn vận của đơn hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id', duy nhất"
+    unique: true
+  carrier_id:
+    type: integer
+    description: "FK tham chiếu đến 'carriers.id'"
+  tracking_code:
+    type: string
+    description: "Mã vận đơn từ hãng vận chuyển"
+  status:
+    type: string
+    enum: ['requested', 'ready', 'picking', 'in_transit', 'delivered', 'failed', 'returned']
+    description: "Trạng thái vận đơn"
+  fee:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Phí vận chuyển"
+    nullable: true
+  label_url:
+    type: string
+    description: "URL của tem vận đơn"
+    nullable: true
+  estimated_delivery_date:
+    type: string
+    format: date
+    description: "Ngày giao hàng dự kiến"
+    nullable: true
+  shipped_at:
+    type: string
+    format: date-time
+    nullable: true
+  delivered_at:
+    type: string
+    format: date-time
+    nullable: true
+  raw_payload:
+    type: object
+    format: json
+    description: "Dữ liệu gốc trả về từ hãng vận chuyển"
+relationships:
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng của đơn vận này."
+  - type: belongsTo
+    related: Carrier
+    description: "Hãng vận chuyển xử lý đơn này."
+  - type: hasMany
+    related: ShipmentEvent
+    description: "Lịch sử các sự kiện của đơn vận."

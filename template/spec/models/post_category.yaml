@@ -1,0 +1,20 @@
+name: PostCategory
+table: post_categories
+description: "Danh mục cho bài viết"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  name:
+    type: string
+    description: "Tên danh mục"
+  slug:
+    type: string
+    description: "Slug cho URL, duy nhất"
+    unique: true
+relationships:
+  - type: belongsToMany
+    related: Post
+    table: post_category_post
+    description: "Các bài viết thuộc danh mục này."

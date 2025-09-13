@@ -1,0 +1,29 @@
+name: ShipmentEvent
+table: shipment_events
+description: "Một sự kiện trong lịch sử của đơn vận (webhook từ hãng)"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  shipment_id:
+    type: integer
+    description: "FK tham chiếu đến 'shipments.id'"
+  status:
+    type: string
+    description: "Mã trạng thái/sự kiện từ hãng vận chuyển"
+  message:
+    type: string
+    description: "Mô tả sự kiện"
+  occurred_at:
+    type: string
+    format: date-time
+    description: "Thời điểm sự kiện diễn ra"
+  raw:
+    type: object
+    format: json
+    description: "Toàn bộ dữ liệu gốc của sự kiện"
+relationships:
+  - type: belongsTo
+    related: Shipment
+    description: "Đơn vận của sự kiện này."

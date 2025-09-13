@@ -1,0 +1,11 @@
+name: NotificationTemplate
+table: notification_templates
+description: "Mẫu template cho các loại thông báo (email, sms, etc.)"
+properties:
+  id: { type: integer, readOnly: true }
+  key: { type: string, unique: true, description: "Key định danh, vd: order_placed" }
+  channel: { type: string, enum: ['email', 'sms', 'push', 'inapp'] }
+  subject: { type: string, nullable: true, description: "Tiêu đề (cho email)" }
+  body: { type: string, format: longtext, description: "Nội dung template" }
+  is_active: { type: boolean }
+relationships: []

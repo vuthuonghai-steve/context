@@ -1,0 +1,37 @@
+name: VoucherUsage
+table: voucher_usages
+description: "Ghi lại lịch sử sử dụng voucher của người dùng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  voucher_id:
+    type: integer
+    description: "FK tham chiếu đến 'vouchers.id'"
+  user_id:
+    type: integer
+    description: "FK tham chiếu đến 'users.id'"
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id'"
+    nullable: true
+  status:
+    type: string
+    enum: ['reserved', 'consumed', 'released']
+    description: "Trạng thái sử dụng"
+  used_at:
+    type: string
+    format: date-time
+    description: "Thời điểm sử dụng"
+    nullable: true
+relationships:
+  - type: belongsTo
+    related: Voucher
+    description: "Voucher đã được sử dụng."
+  - type: belongsTo
+    related: User
+    description: "Người dùng đã sử dụng voucher."
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng đã áp dụng voucher."

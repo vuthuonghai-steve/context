@@ -1,0 +1,14 @@
+name: UserRecommendation
+table: user_recommendations
+description: "Gợi ý sản phẩm được cá nhân hóa cho người dùng"
+properties:
+  id: { type: integer, readOnly: true }
+  user_id: { type: integer }
+  product_id: { type: integer }
+  score: { type: number, format: decimal, precision: 5, scale: 2 }
+  reason: { type: object, format: json, description: "Nguồn/lý do gợi ý" }
+  generated_at: { type: string, format: date-time }
+  expires_at: { type: string, format: date-time, nullable: true }
+relationships:
+  - { type: belongsTo, related: User }
+  - { type: belongsTo, related: Product }

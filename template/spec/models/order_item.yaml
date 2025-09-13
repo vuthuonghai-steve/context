@@ -1,0 +1,42 @@
+name: OrderItem
+table: order_items
+description: "Một mục sản phẩm trong một đơn hàng"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  order_id:
+    type: integer
+    description: "FK tham chiếu đến 'orders.id'"
+  product_id:
+    type: integer
+    description: "FK tham chiếu đến 'products.id'"
+  name_snapshot:
+    type: string
+    description: "Tên sản phẩm tại thời điểm đặt hàng"
+  price_snapshot:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Giá sản phẩm tại thời điểm đặt hàng"
+  quantity:
+    type: integer
+    description: "Số lượng sản phẩm"
+  total:
+    type: number
+    format: decimal
+    precision: 12
+    scale: 2
+    description: "Tổng tiền cho mục này (price * quantity)"
+relationships:
+  - type: belongsTo
+    related: Order
+    description: "Đơn hàng chứa mục này."
+  - type: belongsTo
+    related: Product
+    description: "Sản phẩm tương ứng."
+  - type: hasOne
+    related: ProductReview
+    description: "Đánh giá cho mục sản phẩm này."

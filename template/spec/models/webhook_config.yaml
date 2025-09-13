@@ -1,0 +1,11 @@
+name: WebhookConfig
+table: webhooks_config
+description: "Cấu hình cho các webhook đến từ bên thứ 3"
+properties:
+  id: { type: integer, readOnly: true }
+  provider: { type: string, description: "Nhà cung cấp (ghn, vnpay)" }
+  topic: { type: string, description: "Chủ đề của webhook" }
+  secret_hash: { type: string, description: "Chuỗi secret để xác thực HMAC" }
+  is_active: { type: boolean }
+relationships:
+  - { type: hasMany, related: WebhookLog }

@@ -1,0 +1,26 @@
+name: Carrier
+table: carriers
+description: "Đơn vị vận chuyển"
+properties:
+  id:
+    type: integer
+    description: "Primary Key"
+    readOnly: true
+  code:
+    type: string
+    description: "Mã đơn vị vận chuyển (ghn, ghtk), duy nhất"
+    unique: true
+  name:
+    type: string
+    description: "Tên đầy đủ của đơn vị vận chuyển"
+  config:
+    type: object
+    format: json
+    description: "Cấu hình API (không chứa secret)"
+  is_active:
+    type: boolean
+    description: "Trạng thái hoạt động"
+relationships:
+  - type: hasMany
+    related: Shipment
+    description: "Các đơn vận được xử lý bởi đơn vị này."

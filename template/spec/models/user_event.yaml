@@ -1,0 +1,16 @@
+name: UserEvent
+table: user_events
+description: "Sự kiện hành vi của người dùng trên trang"
+properties:
+  id: { type: integer, readOnly: true }
+  user_id: { type: integer, nullable: true }
+  session_id: { type: string }
+  event: { type: string, enum: ['view', 'search', 'add_to_cart', 'checkout', 'purchase'] }
+  product_id: { type: integer, nullable: true }
+  order_id: { type: integer, nullable: true }
+  metadata: { type: object, format: json, description: "Dữ liệu bổ sung (từ khóa, etc.)" }
+  occurred_at: { type: string, format: date-time }
+relationships:
+  - { type: belongsTo, related: User }
+  - { type: belongsTo, related: Product }
+  - { type: belongsTo, related: Order }

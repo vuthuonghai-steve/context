@@ -1,0 +1,16 @@
+name: Ticket
+table: tickets
+description: "Ticket hỗ trợ từ người dùng"
+properties:
+  id: { type: integer, readOnly: true }
+  user_id: { type: integer }
+  order_id: { type: integer, nullable: true }
+  subject: { type: string }
+  status: { type: string, enum: ['open', 'pending', 'resolved', 'closed'] }
+  priority: { type: string, enum: ['low', 'normal', 'high', 'urgent'] }
+  assigned_to: { type: integer, nullable: true, description: "FK -> users.id (admin)" }
+relationships:
+  - { type: belongsTo, related: User }
+  - { type: belongsTo, related: Order }
+  - { type: belongsTo, related: User, foreignKey: assigned_to, description: "Admin xử lý ticket" }
+  - { type: hasMany, related: TicketMessage }
